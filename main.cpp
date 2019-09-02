@@ -25,7 +25,7 @@ std::string DoIt(const char * s) {
     if (prev == 0)
         return ret;
 
-    size_t count = 1;
+    size_t count = 0;
 
     ret += prev;
 
@@ -33,9 +33,9 @@ std::string DoIt(const char * s) {
         char thisChar = *s;
 
         if (prev != thisChar) {
-            if (count > 1) {
-                ret += std::to_string(count);
-                count = 1;
+            if (count > 0) {
+                ret += std::to_string(count + 1);
+                count = 0;
             }
             if (thisChar == 0)
                 break;
@@ -58,19 +58,19 @@ void DoItInPlace(char * s)
         return;
 
     size_t totalOffset = 0;
-    size_t count = 1;
+    size_t count = 0;
 
     for (s += 1;; ++s) {
         char thisChar = *s;
 
         if (prev != thisChar) {
-            if (count > 1) {
-                std::string numString = std::to_string(count);
-                size_t numStringOffset = totalOffset + count - 1;
+            if (count > 0) {
+                std::string numString = std::to_string(count + 1);
+                size_t numStringOffset = totalOffset + count;
                 size_t numStringSz = numString.size();
                 std::strncpy(s - numStringOffset, numString.c_str(), numStringSz);
-                totalOffset += count - 1 - numStringSz;
-                count = 1;
+                totalOffset += count - numStringSz;
+                count = 0;
             }
             if (totalOffset != 0)
                 s[-totalOffset] = thisChar;
